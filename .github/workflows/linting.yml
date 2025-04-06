@@ -3,9 +3,9 @@ name: "Linting With Ruff"
 
 on:
   push:
-    branches: [ * ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   build:
