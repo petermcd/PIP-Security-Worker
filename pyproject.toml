@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling >= 1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+version = "0.0.1"
+name = "pip-security-worker"
+description = "The worker for the pip-security eco-system."
+requires-python = ">=3.13"
+dependencies = []
+authors = [
+    { name = "Peter McDonald", email = "git@petermcdonald.co.uk" },
+]
+maintainers = [
+    { name = "Peter McDonald", email = "git@petermcdonald.co.uk" },
+]
+readme = {file = "README.md", content-type = "text/markdown"}
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["pip", "security"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/petermcd/PIP-Security-Worker"
+Documentation = "https://github.com/petermcd/PIP-Security-Worker"
+Repository = "https://github.com/petermcd/PIP-Security-Worker.git"
+Issues = "https://github.com/petermcd/PIP-Security-Worker/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[project.scripts]
+analyse = "src.cli:run"
