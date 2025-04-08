@@ -7,7 +7,9 @@ version = "0.0.1"
 name = "pip-security-worker"
 description = "The worker for the pip-security eco-system."
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "requests>=2.32.3",
+]
 authors = [
     { name = "Peter McDonald", email = "git@petermcdonald.co.uk" },
 ]
@@ -32,7 +34,23 @@ Repository = "https://github.com/petermcd/PIP-Security-Worker.git"
 Issues = "https://github.com/petermcd/PIP-Security-Worker/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src"]
+packages = ["pip_security_worker"]
 
 [project.scripts]
-analyse = "src.cli:run"
+analyse = "pip_security_worker.package_analysis.cli:run"
+update_db = "pip_security_worker.vulnerability_database.cli:run"
+
+[tool.ruff]
+
+line-length = 120
+target-version = "py313"
+indent-width = 4
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "single"
