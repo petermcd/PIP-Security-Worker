@@ -8,6 +8,10 @@ name = "pip-security-worker"
 description = "The worker for the pip-security eco-system."
 requires-python = ">=3.13"
 dependencies = [
+    "kafka-python>=2.1.5",
+    "neo4j>=5.28.1",
+    "python-dotenv>=1.1.0",
+    "pyyaml>=6.0.2",
     "requests>=2.32.3",
 ]
 authors = [

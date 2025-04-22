@@ -5,7 +5,7 @@ from xmlrpc.client import DateTime
 
 
 @dataclass
-class Package:
+class Package(object):
     """Package dataclass."""
 
     link: str

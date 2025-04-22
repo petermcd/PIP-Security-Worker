@@ -4,18 +4,38 @@ from xml.dom.minidom import parseString
 from xmlrpc.client import DateTime
 
 import requests
+from kafka import KafkaConsumer
 
 from pip_security_worker import settings
+from pip_security_worker.helpers.exceptions import NoTasksException
 from pip_security_worker.models.package import Package
 
 
-def fetch_next() -> Package:
+def fetch_next() -> Package | None:
     """
     Fetch the next package in the list from the fifo Queue.
 
+    Raises:
+        NoTasksException: On failure to get a task from the FIFO queue.
+
     Returns:
-        Package: The next package to be analyzed taken from the FIFO queue.
+        Package: The next package to be analyzed is taken from the FIFO queue.
     """
+    consumer = KafkaConsumer(
+        settings.KAFKA_TOPIC,
+        bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
+        group_id=settings.KAFKA_GROUP,
+        consumer_timeout_ms=settings.KAFKA_TIMEOUT,
+    )
+
+    try:
+        # TODO create package from message the following message and return it
+        _ = next(consumer)
+    except StopIteration as exc:
+        raise NoTasksException('No tasks waiting.') from exc
+    finally:
+        consumer.close()
+
     # TODO: Implement the logic to fetch the next package from the FIFO queue.
     return Package(
         name='example',
@@ -47,6 +67,3 @@ def fetch_recent() -> list[Package]:
             published = DateTime(item.getElementsByTagName('pubDate')[0].firstChild.nodeValue)
             packages.append(Package(name=title, version=version, link=link, published=published))
     return packages
-
-
-fetch_recent()

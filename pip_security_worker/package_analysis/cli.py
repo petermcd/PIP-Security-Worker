@@ -3,7 +3,7 @@
 from pip_security_worker.package_analysis.analyse import Analyse
 
 
-def run():
+def run() -> None:
     """Run the analysis application."""
     Analyse()
 
