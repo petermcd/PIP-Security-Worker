@@ -59,4 +59,7 @@ fixable = ["ALL"]
 [tool.ruff.format]
 quote-style = "single"
 
-[tool.mypy]
+[tool.mypt.overrides]
+[[tool.mypy.overrides]]
+module = ["dotenv.*", "neo4j.*", "kafka.*"]
+ignore_missing_imports = true

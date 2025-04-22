@@ -60,10 +60,11 @@ def fetch_recent() -> list[Package]:
         dom = parseString(xml_data)
         items = dom.getElementsByTagName('item')
         for item in items:
-            link = item.getElementsByTagName('link')[0].firstChild.nodeValue
+            #TODO Fix this typing
+            link = item.getElementsByTagName('link')[0].firstChild.nodeValue  # type: ignore[union-attr]
+            published = DateTime(item.getElementsByTagName('pubDate')[0].firstChild.nodeValue)  # type: ignore[union-attr]
             link_split = link.split('/')
             title = link_split[-2]
             version = link_split[-1]
-            published = DateTime(item.getElementsByTagName('pubDate')[0].firstChild.nodeValue)
             packages.append(Package(name=title, version=version, link=link, published=published))
     return packages

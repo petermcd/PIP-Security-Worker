@@ -10,7 +10,7 @@ PYPI_RECENT_PACKAGE_UPDATE_FEED = 'https://pypi.org/rss/updates.xml'
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
 load_dotenv(dotenv_path)
 
-PIP_ADVISORY_DB_URL = os.getenv('PIP_ADVISORY_DB_URL')
+PIP_ADVISORY_DB_URL = os.getenv('PIP_ADVISORY_DB_URL', 'https://github.com/pypa/advisory-database.git')
 
 # Kafka configuration
 KAFKA_TOPIC = os.getenv('KAFKA_TOPIC', 'tasks')
