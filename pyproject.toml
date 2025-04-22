@@ -13,6 +13,7 @@ dependencies = [
     "python-dotenv>=1.1.0",
     "pyyaml>=6.0.2",
     "requests>=2.32.3",
+    "sentry-sdk>=2.26.1",
 ]
 authors = [
     { name = "Peter McDonald", email = "git@petermcdonald.co.uk" },
@@ -61,5 +62,5 @@ quote-style = "single"
 
 [tool.mypt.overrides]
 [[tool.mypy.overrides]]
-module = ["dotenv.*", "neo4j.*", "kafka.*"]
+module = ["dotenv.*", "kafka.*", "neo4j.*", "sentry_sdk.*"]
 ignore_missing_imports = true

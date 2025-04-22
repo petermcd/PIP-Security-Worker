@@ -17,7 +17,7 @@ uvx ruff check
 
 This package relies on access to a KAFKA queue. I have been developing using the `apache/kafka` docker image.
 
-Once the imnage has been created, the following command is required to create the topic.:
+Once the image has been created, the following command is required to create the topic.:
 
 ```bash
 ./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic analyse --partitions 10
@@ -25,7 +25,7 @@ Once the imnage has been created, the following command is required to create th
 
 For this to function, the following environment variables are required:
 
-KAFKA_GROUP - To store the group name the application will use.
+KAFKA_GROUP - To store the name of the Kafka group the application will use.
 KAFKA_TIMEOUT - To store the request timeout for the consumer.
 KAFKA_BOOTSTRAP_SERVERS - A list of bootstrap servers comma seperated, each entry should be in the format localhost:9092.
 KAFKA_TOPIC - The topic name to store tasks in.
@@ -44,6 +44,7 @@ NEO4J_PASSWORD - to store the NEO4j password.
 
 ```bash
 PIP_ADVISORY_DB_URL=https://github.com/pypa/advisory-database.git
+PYPI_UPDATE_FEED=https://pypi.org/rss/updates.xml
 KAFKA_GROUP=analyse
 KAFKA_TIMEOUT=5000
 KAFKA_BOOTSTRAP_SERVERS=localhost:9092
@@ -52,3 +53,10 @@ NEO4J_URL=neo4j://localhost:7687
 NEO4J_USERNAME=neo4j
 NEO4J_PASSWORD=password
 ```
+
+## Sentry
+
+This package can also report errors to the Sentry service. To enable this, the following environment variable should be
+populated:
+
+SENTRY_DSN - The full DSN provided by Sentry.
