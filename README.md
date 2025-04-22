@@ -27,7 +27,7 @@ For this to function, the following environment variables are required:
 
 KAFKA_GROUP - To store the name of the Kafka group the application will use.
 KAFKA_TIMEOUT - To store the request timeout for the consumer.
-KAFKA_BOOTSTRAP_SERVERS - A list of bootstrap servers comma seperated, each entry should be in the format localhost:9092.
+KAFKA_BOOTSTRAP_SERVERS - A list of bootstrap servers comma separated, each entry should be in the format localhost:9092.
 KAFKA_TOPIC - The topic name to store tasks in.
 
 ### NEO4j
