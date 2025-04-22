@@ -22,6 +22,4 @@ jobs:
       - name: Run iSort
         run: uvx isort .
       - name: Run mypy
-        run: uvx mypy pip_security_worker
-
-
+        run: uvx --with types-PyYAML --with typers-requests mypy pip_security_worker
