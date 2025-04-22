@@ -8,18 +8,16 @@ on:
     branches: [ "main" ]
 
 jobs:
-  uv-example:
+  uv:
     name: python
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install uv
         uses: astral-sh/setup-uv@v5
-      - name: Set up Python
-        run: uv python install
       - name: Run Ruff
         run: uvx ruff check
       - name: Run iSort
         run: uvx isort .
       - name: Run mypy
-        run: uvx --with types-PyYAML --with typers-requests mypy pip_security_worker
+        run: uvx --with types-PyYAML --with types-requests mypy pip_security_worker
