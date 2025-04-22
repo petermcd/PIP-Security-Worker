@@ -1,5 +1,5 @@
 ---
-name: "Linting With Ruff"
+name: "UV Checks"
 
 on:
   push:
@@ -8,19 +8,18 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    name: Linting
+  uv-example:
+    name: python
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [ "3.13" ]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      - uses: astral-sh/ruff-action@v3
-        with:
-          args: "check --select I ."
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Set up Python
+        run: uv python install
+      - name: Run iSort
+        run: uvx isort .
+      - name: Run mypy
+        run: uvx mypy pip_security_worker
 
 

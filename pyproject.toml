@@ -58,3 +58,5 @@ fixable = ["ALL"]
 
 [tool.ruff.format]
 quote-style = "single"
+
+[tool.mypy]
