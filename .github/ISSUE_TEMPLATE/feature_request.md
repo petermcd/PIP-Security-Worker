@@ -6,7 +6,7 @@ labels: enhancement
 assignees: ''
 ---
 
-Please ensure that this is not already covered in the [TODO list](TODO.md).
+Please ensure that this is not already covered in the TODO.md in the root of the project.
 
 **Is Your Feature Request Related To A Problem? Please Describe.**
 

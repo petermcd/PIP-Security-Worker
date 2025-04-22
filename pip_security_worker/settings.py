@@ -1,14 +1,14 @@
 """Settings for pip_security_worker."""
-
 import os
 
+import sentry_sdk
 from dotenv import load_dotenv
 
-# The location of the recently updated packages feed.
-PYPI_RECENT_PACKAGE_UPDATE_FEED = 'https://pypi.org/rss/updates.xml'
-
-dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(dotenv_path)
+
+# The location of the recently updated packages feed.
+PYPI_RECENT_PACKAGE_UPDATE_FEED = os.getenv('PYPI_UPDATE_FEED', 'https://pypi.org/rss/updates.xml')
 
 PIP_ADVISORY_DB_URL = os.getenv('PIP_ADVISORY_DB_URL', 'https://github.com/pypa/advisory-database.git')
 
@@ -25,3 +25,11 @@ NEO4J_PASSWORD = os.getenv('NEO4J_PASSWORD', 'neo4j')
 
 # GIT Configuration
 GIT_STORAGE = os.getenv('GIT_STORAGE', '/tmp/advisory_database/')
+
+#Sentry Configuration
+
+if SENTRY_DSN:= os.getenv('SENTRY_DSN'):
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        send_default_pii=True,
+    )
