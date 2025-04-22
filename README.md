@@ -13,6 +13,15 @@ uvx ruff format
 uvx ruff check
 ```
 
+## Configuration
+
+###
+
+There are two environment variables used in this project:
+
+PIP_ADVISORY_DB_URL - The URL for the advisory Git repository
+PYPI_UPDATE_FEED - The URL for the package update feed or Pypi.org
+
 ### KAFKA
 
 This package relies on access to a KAFKA queue. I have been developing using the `apache/kafka` docker image.
