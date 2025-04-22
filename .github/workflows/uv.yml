@@ -1,0 +1,23 @@
+---
+name: "UV Checks"
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  uv:
+    name: python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Run Ruff
+        run: uvx ruff check
+      - name: Run iSort
+        run: uvx isort .
+      - name: Run mypy
+        run: uvx --with types-PyYAML --with types-requests mypy pip_security_worker
