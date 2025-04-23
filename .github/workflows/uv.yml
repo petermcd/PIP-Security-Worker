@@ -20,4 +20,4 @@ jobs:
       - name: Run iSort
         run: uvx isort .
       - name: Run mypy
-        run: uvx --with types-PyYAML --with types-requests --with types-defusedxml mypy pip_security_worker
+        run: uvx --with types-PyYAML --with types-requests --with types-defusedxml --with types-python-dateutil mypy pip_security_worker

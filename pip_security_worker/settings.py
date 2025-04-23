@@ -19,7 +19,7 @@ KAFKA_GROUP = os.getenv('KAFKA_GROUP', 'processor')
 KAFKA_TIMEOUT = os.getenv('KAFKA_TIMEOUT', 5000)
 
 # NEO4j Configuration
-NEO4J_URL = os.getenv('KAFKA_TOPIC', 'localhost:9092')
+NEO4J_URL = os.getenv('NEO4J_URL', 'neo4j://localhost:7687')
 NEO4J_USERNAME = os.getenv('NEO4J_USERNAME', 'neo4j')
 NEO4J_PASSWORD = os.getenv('NEO4J_PASSWORD', 'neo4j')
 
