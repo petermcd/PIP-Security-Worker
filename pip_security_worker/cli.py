@@ -14,4 +14,3 @@ def run_analyses() -> None:
 def run_update_db() -> None:
     """Entry point to the application."""
     LOG.info('Updating database')
-    print('accessed')
