@@ -1,5 +1,5 @@
 """ "Neo4j handler."""
-
+import logging
 from json import dumps
 
 from neo4j import GraphDatabase
@@ -8,12 +8,14 @@ from pip_security_worker import settings
 from pip_security_worker.models.advisory import Advisory
 from pip_security_worker.models.package import Package
 
+LOG = logging.getLogger(__name__)
 
 class Neo4jHandler(object):
     __slots__ = ('_driver',)
 
     def __init__(self) -> None:
         """Initialize the Neo4jHandler."""
+        LOG.debug('Initializing Neo4jHandler')
         self._driver = GraphDatabase.driver(settings.NEO4J_URL, auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD))
 
     def add_advisory(self, advisory: Advisory) -> None:
@@ -23,6 +25,7 @@ class Neo4jHandler(object):
         Args:
             advisory (Advisory): The advisory to be added.
         """
+        LOG.debug(f'Adding advisory {advisory.name} to database')
         advisory_url: str = advisory.url or ""
         security_types: str = advisory.security_type or ""
         severity_score: str = advisory.severity_score or ""
@@ -42,11 +45,6 @@ class Neo4jHandler(object):
             advisory_severity_score=severity_score,
             advisory_references=dumps(advisory.references),
             advisory_versions=dumps(advisory.versions),
-        )
-        self._driver.execute_query(
-            "MERGE (advisory:Advisory {{name: $advisory_name, advisory_id: $advisory_id}})",
-            advisory_id=advisory.advisory_id,
-            advisory_name=advisory.name,
         )
 
     def link_to_package(self, advisory: Advisory) -> None:
@@ -69,5 +67,7 @@ class Neo4jHandler(object):
 
     def close(self) -> None:
         """Close the driver."""
+        LOG.debug('Closing Neo4jHandler')
         if self._driver is not None:
+            LOG.debug('Connection exists, closing')
             self._driver.close()

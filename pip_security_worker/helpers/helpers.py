@@ -1,5 +1,5 @@
 """Helper function§s for package analysis."""
-
+import logging
 from xml.parsers.expat import ExpatError
 from xmlrpc.client import DateTime
 
@@ -10,6 +10,8 @@ from kafka import KafkaConsumer
 from pip_security_worker import settings
 from pip_security_worker.helpers.exceptions import NoTasksException
 from pip_security_worker.models.package import Package
+
+LOG = logging.getLogger(__name__)
 
 
 def fetch_next() -> Package | None:
@@ -22,6 +24,7 @@ def fetch_next() -> Package | None:
     Returns:
         Package: The next package to be analyzed is taken from the FIFO queue.
     """
+    LOG.debug('Starting fetch of next package from Kafka')
     consumer = KafkaConsumer(
         settings.KAFKA_TOPIC,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
@@ -33,6 +36,7 @@ def fetch_next() -> Package | None:
         # TODO create package from message the following message and return it
         _ = next(consumer)
     except StopIteration as exc:
+        LOG.debug('No tasks waiting in Kafka.')
         raise NoTasksException('No tasks waiting.') from exc
     finally:
         consumer.close()
@@ -53,15 +57,17 @@ def fetch_recent() -> list[Package]:
     Returns:
         list[Package]: A list of recently updated packages.
     """
+    LOG.debug('Starting fetch of recently updated packages')
     url = settings.PYPI_RECENT_PACKAGE_UPDATE_FEED
     response = requests.get(url)
     packages: list[Package] = []
     if response.status_code == requests.codes.ok:
+        LOG.debug('Successfully fetched recently updated packages')
         xml_data = response.content
         try:
             dom = parseString(xml_data.decode('utf-8'))
         except ExpatError:
-            #TODO Log this error
+            LOG.critical('Failed to parse XML data')
             return packages
         items = dom.getElementsByTagName('item')
         for item in items:
@@ -74,4 +80,5 @@ def fetch_recent() -> list[Package]:
             title = link_split[-2]
             version = link_split[-1]
             packages.append(Package(name=title, version=version, link=link, published=published))
+    LOG.info(f'Successfully fetched {len(packages)} packages')
     return packages

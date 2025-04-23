@@ -43,8 +43,8 @@ Issues = "https://github.com/petermcd/PIP-Security-Worker/issues"
 packages = ["pip_security_worker"]
 
 [project.scripts]
-analyse = "pip_security_worker.package_analysis.cli:run"
-update_db = "pip_security_worker.vulnerability_database.cli:run"
+analyse = "pip_security_worker.cli:run_analyses"
+update_db = "pip_security_worker.cli:run_update_db"
 
 [tool.ruff]
 
