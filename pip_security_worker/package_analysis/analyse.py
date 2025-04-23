@@ -18,4 +18,3 @@ class Analyse(object):
         """
         LOG.debug('Initializing Analyse')
         package = package or fetch_next()
-        print(package)
