@@ -1,11 +1,11 @@
 """Application-specific exceptions."""
 
 
-class NoTasksException(Exception):
-    """Kafka topic has no tasks."""
+class DatabaseConnectionError(Exception):
+    """NEO4j database connection error."""
     pass
 
 
-class DatabaseConnectionError(Exception):
-    """NEO4j database connection error."""
+class NoTasksException(Exception):
+    """Kafka topic has no tasks."""
     pass

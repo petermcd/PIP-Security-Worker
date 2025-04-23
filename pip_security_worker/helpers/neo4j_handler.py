@@ -18,8 +18,8 @@ class Neo4jHandler(object):
     def __init__(self) -> None:
         """Initialize the Neo4jHandler."""
         LOG.debug('Initializing Neo4jHandler')
-        print(settings.NEO4J_URL)
         try:
+            LOG.debug('Connecting to Neo4j database')
             self._driver = GraphDatabase.driver(
                 settings.NEO4J_URL,
                 auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD),
@@ -67,7 +67,7 @@ class Neo4jHandler(object):
             advisory (Advisory): The advisory to be linked.
         """
         if not advisory.versions:
-            # No versions to link to, so we don't need to do anything.
+            LOG.debug(f'No affected versions found for advisory {advisory.name}')
             #TODO identify what to do here.
             return
         for version in advisory.versions:
@@ -88,7 +88,7 @@ class Neo4jHandler(object):
         Args:
             package (Package): The package to be added.
         """
-        # TODO implement
+        # TODO fully implement
         LOG.debug(f'Adding package {package.name} to database')
         self._driver.execute_query(
             "MERGE (advisory:Package {name: $package_name, version: $package_version})",
