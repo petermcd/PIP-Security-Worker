@@ -69,7 +69,9 @@ def fetch_recent() -> list[Package]:
             link = item.getElementsByTagName('link')[0].firstChild.nodeValue  # type: ignore[union-attr]
             published = DateTime(item.getElementsByTagName('pubDate')[0].firstChild.nodeValue)  # type: ignore[union-attr]
             link_split = link.split('/')
-            title = link_split[-3]
-            version = link_split[-2]
+            if not link_split[-1]:
+                del link_split[-1]
+            title = link_split[-2]
+            version = link_split[-1]
             packages.append(Package(name=title, version=version, link=link, published=published))
     return packages

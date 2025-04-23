@@ -61,6 +61,18 @@ class TestHelpers(object):
         ),
         (
             200,
+            './tests/test_data/single_alt_url.xml',
+            [
+                Package(
+                    name='bbbctl',
+                    version='0.3.2',
+                    link='https://pypi.org/project/bbbctl/0.3.2',
+                    published=DateTime('Tue, 22 Apr 2025 15:09:38 GMT')
+                ),
+            ],
+        ),
+        (
+            200,
             './tests/test_data/multiple.xml',
             [
                 Package(
