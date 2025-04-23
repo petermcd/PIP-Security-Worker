@@ -44,6 +44,11 @@ class TestHelpers(object):
         ),
         (
             200,
+            './tests/test_data/empty.xml',
+            [],
+        ),
+        (
+            200,
             './tests/test_data/single.xml',
             [
                 Package(
@@ -51,6 +56,30 @@ class TestHelpers(object):
                     version='0.3.2',
                     link='https://pypi.org/project/bbbctl/0.3.2/',
                     published=DateTime('Tue, 22 Apr 2025 15:09:38 GMT')
+                ),
+            ],
+        ),
+        (
+            200,
+            './tests/test_data/multiple.xml',
+            [
+                Package(
+                    name='flytekitplugins-papermill',
+                    version='1.14.8',
+                    link='https://pypi.org/project/flytekitplugins-papermill/1.14.8/',
+                    published=DateTime('Wed, 23 Apr 2025 06:58:26 GMT')
+                ),
+                Package(
+                    name='flytekitplugins-pandera',
+                    version='1.14.8',
+                    link='https://pypi.org/project/flytekitplugins-pandera/1.14.8/',
+                    published=DateTime('Wed, 23 Apr 2025 06:58:25 GMT')
+                ),
+                Package(
+                    name='flytekitplugins-openai',
+                    version='1.14.8',
+                    link='https://pypi.org/project/flytekitplugins-openai/1.14.8/',
+                    published=DateTime('Wed, 23 Apr 2025 06:58:24 GMT')
                 ),
             ],
         ),
