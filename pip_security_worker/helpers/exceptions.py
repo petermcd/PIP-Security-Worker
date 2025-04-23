@@ -6,6 +6,11 @@ class DatabaseConnectionError(Exception):
     pass
 
 
-class NoTasksException(Exception):
+class GeneralError(Exception):
+    """General error."""
+    pass
+
+
+class NoTasksError(Exception):
     """Kafka topic has no tasks."""
     pass

@@ -27,6 +27,6 @@ def run_update_db() -> None:
 
     with PIPAdvisory() as pip_advisory:
         for advisory in pip_advisory.test():
-            LOG.info(f'Adding advisory {advisory.id} for package {advisory.name} to the database')
+            LOG.info(f'Adding advisory {advisory.advisory_id} for package {advisory.name} to the database')
             neo4j_handler.add_advisory(advisory=advisory)
 

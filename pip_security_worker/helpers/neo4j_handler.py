@@ -24,7 +24,7 @@ class Neo4jHandler(object):
                 settings.NEO4J_URL,
                 auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD),
             )
-        except neo4j.exceptions.ConfigurationError as exc:
+        except (neo4j.exceptions.ConfigurationError, neo4j.exceptions.ServiceUnavailable) as exc:
             LOG.critical('Failed to connect to Neo4j database')
             raise DatabaseConnectionError('Failed to connect to Neo4j database') from exc
 

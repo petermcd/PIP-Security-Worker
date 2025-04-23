@@ -8,7 +8,7 @@ from defusedxml.minidom import parseString
 from kafka import KafkaConsumer
 
 from pip_security_worker import settings
-from pip_security_worker.helpers.exceptions import NoTasksException
+from pip_security_worker.helpers.exceptions import NoTasksError
 from pip_security_worker.models.package import Package
 
 LOG = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ def fetch_next() -> Package | None:
         _ = next(consumer)
     except StopIteration as exc:
         LOG.debug('No tasks waiting in Kafka.')
-        raise NoTasksException('No tasks waiting.') from exc
+        raise NoTasksError('No tasks waiting.') from exc
     finally:
         consumer.close()
 
