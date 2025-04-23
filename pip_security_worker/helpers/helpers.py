@@ -1,9 +1,10 @@
 """Helper function§s for package analysis."""
 
-from xml.dom.minidom import parseString
+from xml.parsers.expat import ExpatError
 from xmlrpc.client import DateTime
 
 import requests
+from defusedxml.minidom import parseString
 from kafka import KafkaConsumer
 
 from pip_security_worker import settings
@@ -57,13 +58,19 @@ def fetch_recent() -> list[Package]:
     packages: list[Package] = []
     if response.status_code == requests.codes.ok:
         xml_data = response.content
-        dom = parseString(xml_data)
+        try:
+            dom = parseString(xml_data.decode('utf-8'))
+        except ExpatError:
+            #TODO Log this error
+            return packages
         items = dom.getElementsByTagName('item')
         for item in items:
             #TODO Fix this typing
             link = item.getElementsByTagName('link')[0].firstChild.nodeValue  # type: ignore[union-attr]
             published = DateTime(item.getElementsByTagName('pubDate')[0].firstChild.nodeValue)  # type: ignore[union-attr]
             link_split = link.split('/')
+            if not link_split[-1]:
+                del link_split[-1]
             title = link_split[-2]
             version = link_split[-1]
             packages.append(Package(name=title, version=version, link=link, published=published))

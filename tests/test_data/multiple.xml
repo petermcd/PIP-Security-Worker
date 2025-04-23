@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>PyPI recent updates</title>
+        <link>https://pypi.org/</link>
+        <description>Recent updates to the Python Package Index</description>
+        <language>en</language>
+        <item>
+            <title>flytekitplugins-papermill 1.14.8</title>
+            <link>https://pypi.org/project/flytekitplugins-papermill/1.14.8/</link>
+            <description>This is the flytekit papermill plugin</description>
+            <author>admin@flyte.org</author>
+            <pubDate>Wed, 23 Apr 2025 06:58:26 GMT</pubDate>
+        </item>
+        <item>
+            <title>flytekitplugins-pandera 1.14.8</title>
+            <link>https://pypi.org/project/flytekitplugins-pandera/1.14.8/</link>
+            <description>Pandera plugin for flytekit</description>
+            <author>admin@flyte.org</author>
+            <pubDate>Wed, 23 Apr 2025 06:58:25 GMT</pubDate>
+        </item>
+        <item>
+            <title>flytekitplugins-openai 1.14.8</title>
+            <link>https://pypi.org/project/flytekitplugins-openai/1.14.8/</link>
+            <description>This package holds the openai plugins for flytekit</description>
+            <author>admin@flyte.org</author>
+            <pubDate>Wed, 23 Apr 2025 06:58:24 GMT</pubDate>
+        </item>
+    </channel>
+</rss>
