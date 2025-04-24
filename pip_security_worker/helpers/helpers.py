@@ -1,5 +1,8 @@
 """Helper function§s for package analysis."""
+
 import logging
+from datetime import datetime
+from json import loads
 from xml.parsers.expat import ExpatError
 from xmlrpc.client import DateTime
 
@@ -29,25 +32,28 @@ def fetch_next() -> Package | None:
         settings.KAFKA_TOPIC,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
         group_id=settings.KAFKA_GROUP,
-        consumer_timeout_ms=settings.KAFKA_TIMEOUT,
+        consumer_timeout_ms=int(settings.KAFKA_TIMEOUT),
+        auto_offset_reset='earliest',
     )
 
     try:
-        # TODO create package from message the following message and return it
-        _ = next(consumer)
+        LOG.debug('Fetching next package from Kafka')
+        data_str = next(consumer).value.decode('utf-8')
+        data_json = loads(data_str)
+        LOG.debug(f'Fetched package {data_json["package_name"]} {data_json["package_version"]}')
+        package: Package = Package(
+            name=data_json['package_name'],
+            version=data_json['package_version'],
+            link=data_json['package_link'],
+            published=datetime.fromisoformat(data_json['published']),
+        )
     except StopIteration as exc:
         LOG.debug('No tasks waiting in Kafka.')
         raise NoTasksError('No tasks waiting.') from exc
     finally:
         consumer.close()
 
-    # TODO: Implement the logic to fetch the next package from the FIFO queue.
-    return Package(
-        name='example',
-        version='2.0.0',
-        link='https://example.com',
-        published=DateTime('2023-10-01T12:00:00Z'),
-    )
+    return package
 
 
 def fetch_recent() -> list[Package]:
@@ -71,9 +77,10 @@ def fetch_recent() -> list[Package]:
             return packages
         items = dom.getElementsByTagName('item')
         for item in items:
-            #TODO Fix this typing
+            # TODO Fix this typing
             link = item.getElementsByTagName('link')[0].firstChild.nodeValue  # type: ignore[union-attr]
-            published = DateTime(item.getElementsByTagName('pubDate')[0].firstChild.nodeValue)  # type: ignore[union-attr]
+            xml_date: DateTime = item.getElementsByTagName('pubDate')[0].firstChild.nodeValue  # type: ignore[union-attr]
+            published = datetime.strptime(str(xml_date), '%a, %d %b %Y %H:%M:%S %Z')
             link_split = link.split('/')
             if not link_split[-1]:
                 del link_split[-1]

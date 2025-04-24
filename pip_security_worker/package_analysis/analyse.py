@@ -1,10 +1,12 @@
 """Code to analyze the requirements of a package."""
+
 import logging
 
 from pip_security_worker.helpers.helpers import fetch_next
 from pip_security_worker.models.package import Package
 
 LOG = logging.getLogger(__name__)
+
 
 class Analyse(object):
     """Class to analyze a package."""

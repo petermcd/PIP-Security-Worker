@@ -6,16 +6,19 @@ import sys
 from pip_security_worker.helpers.exceptions import DatabaseConnectionError
 from pip_security_worker.helpers.neo4j_handler import Neo4jHandler
 from pip_security_worker.package_analysis.analyse import Analyse
+from pip_security_worker.package_analysis.fetch_tasks import FetchTasks
 from pip_security_worker.vulnerability_database.pip_advisory import PIPAdvisory
 
 LOG = logging.getLogger(__name__)
 
-def run_analyses() -> None:
+
+def run_analysis() -> None:
     """Run the analysis application."""
-    LOG.info('Running analyses')
+    LOG.info('Running analysis')
     Analyse()
 
-def run_update_db() -> None:
+
+def run_update_advisory_db() -> None:
     """Entry point to the application."""
     LOG.info('Updating advisory database')
 
@@ -30,3 +33,8 @@ def run_update_db() -> None:
             LOG.info(f'Adding advisory {advisory.advisory_id} for package {advisory.name} to the database')
             neo4j_handler.add_advisory(advisory=advisory)
 
+
+def run_recent_updated_packages() -> None:
+    """Entry point to the application."""
+    LOG.info('Fetching recently updated packages')
+    FetchTasks().update()

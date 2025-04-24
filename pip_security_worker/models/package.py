@@ -1,7 +1,7 @@
 """Dataclass for package information."""
 
 from dataclasses import dataclass
-from xmlrpc.client import DateTime
+from datetime import datetime
 
 
 @dataclass
@@ -11,4 +11,4 @@ class Package(object):
     link: str
     name: str
     version: str
-    published: DateTime
+    published: datetime

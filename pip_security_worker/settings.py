@@ -1,4 +1,5 @@
 """Settings for pip_security_worker."""
+
 import os
 
 import sentry_sdk
@@ -26,9 +27,9 @@ NEO4J_PASSWORD = os.getenv('NEO4J_PASSWORD', 'neo4j')
 # GIT Configuration
 GIT_STORAGE = os.getenv('GIT_STORAGE', '/tmp/advisory_database/')
 
-#Sentry Configuration
+# Sentry Configuration
 
-if SENTRY_DSN:= os.getenv('SENTRY_DSN'):
+if SENTRY_DSN := os.getenv('SENTRY_DSN'):
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         send_default_pii=True,
