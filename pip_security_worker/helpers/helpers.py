@@ -2,7 +2,7 @@
 
 import logging
 from datetime import datetime
-from json import loads
+from json import loads, JSONDecodeError
 from xml.parsers.expat import ExpatError
 from xmlrpc.client import DateTime
 
@@ -50,6 +50,9 @@ def fetch_next() -> Package | None:
     except StopIteration as exc:
         LOG.debug('No tasks waiting in Kafka.')
         raise NoTasksError('No tasks waiting.') from exc
+    except JSONDecodeError:
+        LOG.debug('Failed to decode JSON data')
+        raise NoTasksError('Task not in expected format.') from None
     finally:
         consumer.close()
 
