@@ -44,8 +44,9 @@ Issues = "https://github.com/petermcd/PIP-Security-Worker/issues"
 packages = ["pip_security_worker"]
 
 [project.scripts]
-analyse = "pip_security_worker.cli:run_analyses"
-update_db = "pip_security_worker.cli:run_update_db"
+analyse = "pip_security_worker.cli:run_analysis"
+update_advisory_db = "pip_security_worker.cli:run_update_advisory_db"
+updated_packages = "pip_security_worker.cli:run_recent_updated_packages"
 
 [tool.ruff]
 
@@ -64,5 +65,5 @@ quote-style = "single"
 
 [tool.mypt.overrides]
 [[tool.mypy.overrides]]
-module = ["dotenv.*", "kafka.*", "neo4j.*", "sentry_sdk.*"]
+module = ["dotenv.*", "kafka.*", "neo4j.*", "pytest.*", "sentry_sdk.*"]
 ignore_missing_imports = true
