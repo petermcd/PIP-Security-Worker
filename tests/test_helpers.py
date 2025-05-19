@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from pip_security_worker.helpers.helpers import fetch_recent, fetch_next
+from pip_security_worker.helpers.helpers import fetch_next, fetch_recent
 from pip_security_worker.models.package import Package
 
 
@@ -27,8 +27,10 @@ class MockedRequest(object):
         with open(document, 'r') as fh:
             self.content = fh.read().encode('utf-8')
 
+
 class MockedKafkaItem(object):
     value = ''
+
     def __init__(self, *args, **kwargs):
         if 'value' in kwargs:
             self.value = kwargs['value']
@@ -112,17 +114,19 @@ class TestHelpers(object):
         'record,expected_package',
         [
             (
-                MockedKafkaItem(value=b'{"package_link": "https://pypi.org/project/Monzo-API/", "package_name": "monzo-api", "package_version": "1.2.0", "published": "2025-04-18T10:30:00.000Z"}'),
+                MockedKafkaItem(
+                    value=b'{"package_link": "https://pypi.org/project/Monzo-API/", "package_name": "monzo-api", "package_version": "1.2.0", "published": "2025-04-18T10:30:00.000Z"}'
+                ),
                 Package(
                     name='monzo-api',
                     version='1.2.0',
-                    link="https://pypi.org/project/Monzo-API/",
+                    link='https://pypi.org/project/Monzo-API/',
                     published=datetime(2025, 4, 18, 10, 30, tzinfo=timezone.utc),
-                )
+                ),
             ),
         ],
     )
-    def test_fetch_next(self, record: str ,expected_package: Package):
+    def test_fetch_next(self, record: str, expected_package: Package):
         with patch('kafka.KafkaConsumer.__init__', return_value=None):
             with patch('kafka.KafkaConsumer.close', return_value=None):
                 with patch('kafka.KafkaConsumer.__next__', return_value=record):

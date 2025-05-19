@@ -67,16 +67,28 @@ class Neo4jHandler(object):
         Args:
             advisory (Advisory): The advisory to be linked.
         """
+        # Link to the overall package, if it doesn't exist yet, create it.
+        self._driver.execute_query(
+            'MATCH(advisory:Advisory {name: $advisory_name, advisory_id: $advisory_id})'
+            + 'MERGE (package:Package {name: $advisory_name})'
+            + 'ON CREATE SET package.history_analyzed= $package_history_analyzed '
+            + 'MERGE(advisory)-[:advisory_affects_package]->(package)'
+            + 'MERGE(package)-[:package_affected_by]->(advisory)',
+            advisory_name=advisory.name,
+            advisory_id=advisory.advisory_id,
+            package_history_analyzed=0,
+        )
         if not advisory.versions:
             LOG.debug(f'No affected versions found for advisory {advisory.name}')
             # TODO identify what to do here.
             return
         for version in advisory.versions:
+            # Link to the package version if it exists.
             self._driver.execute_query(
-                'MATCH(a: Advisory {name: $advisory_name, advisory_id: $advisory_id})'
-                + 'MATCH(p: Package {name: $advisory_name, version: $affects}) '
-                + 'MERGE(a)-[:affects]->(p)'
-                + 'MERGE(p)-[:affected_by]->(a)',
+                'MATCH(advisory: Advisory {name: $advisory_name, advisory_id: $advisory_id})'
+                + 'MATCH(packageVersion: PackageVersion {name: $advisory_name, version: $affects}) '
+                + 'MERGE(advisory)-[:affects]->(packageVersion)'
+                + 'MERGE(packageVersion)-[:affected_by]->(advisory)',
                 advisory_name=advisory.name,
                 affects=version,
                 advisory_id=advisory.advisory_id,
