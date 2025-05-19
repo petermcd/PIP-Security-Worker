@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SonarLintProjectSettings">
+    <option name="bindingEnabled" value="true" />
+    <option name="projectKey" value="petermcd_PIP-Security-Worker_16d5bf2f-e512-4b2d-bb0c-454f82721f17" />
+    <option name="serverId" value="http://57.128.159.138:9000" />
+  </component>
+</project>
