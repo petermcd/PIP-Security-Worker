@@ -2,7 +2,7 @@
 
 import logging
 from datetime import datetime
-from json import loads, JSONDecodeError
+from json import JSONDecodeError, loads
 from xml.parsers.expat import ExpatError
 from xmlrpc.client import DateTime
 

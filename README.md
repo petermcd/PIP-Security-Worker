@@ -24,7 +24,7 @@ The following are the commands useful for this project:
 uvx ruff format
 uvx ruff check
 uvx isort .
-uvx mypy pip_security_worker
+uvx uvx --with types-PyYAML --with types-requests --with types-defusedxml --with types-python-dateutil mypy pip_security_worker tests
 ```
 
 ## Configuration
