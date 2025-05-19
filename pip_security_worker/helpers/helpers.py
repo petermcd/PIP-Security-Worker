@@ -12,12 +12,12 @@ from kafka import KafkaConsumer
 
 from pip_security_worker import settings
 from pip_security_worker.helpers.exceptions import NoTasksError
-from pip_security_worker.models.package import Package
+from pip_security_worker.models.package_version import PackageVersion
 
 LOG = logging.getLogger(__name__)
 
 
-def fetch_next() -> Package | None:
+def fetch_next() -> PackageVersion | None:
     """
     Fetch the next package in the list from the fifo Queue.
 
@@ -41,10 +41,10 @@ def fetch_next() -> Package | None:
         data_str = next(consumer).value.decode('utf-8')
         data_json = loads(data_str)
         LOG.debug(f'Fetched package {data_json["package_name"]} {data_json["package_version"]}')
-        package: Package = Package(
+        package: PackageVersion = PackageVersion(
             name=data_json['package_name'],
             version=data_json['package_version'],
-            link=data_json['package_link'],
+            url=data_json['package_link'],
             published=datetime.fromisoformat(data_json['published']),
         )
     except StopIteration as exc:
@@ -59,7 +59,7 @@ def fetch_next() -> Package | None:
     return package
 
 
-def fetch_recent() -> list[Package]:
+def fetch_recent() -> list[PackageVersion]:
     """
     Fetch a list of recently updated packages
 
@@ -69,7 +69,7 @@ def fetch_recent() -> list[Package]:
     LOG.debug('Starting fetch of recently updated packages')
     url = settings.PYPI_RECENT_PACKAGE_UPDATE_FEED
     response = requests.get(url)
-    packages: list[Package] = []
+    packages: list[PackageVersion] = []
     if response.status_code == requests.codes.ok:
         LOG.debug('Successfully fetched recently updated packages')
         xml_data = response.content
@@ -89,6 +89,6 @@ def fetch_recent() -> list[Package]:
                 del link_split[-1]
             title = link_split[-2]
             version = link_split[-1]
-            packages.append(Package(name=title, version=version, link=link, published=published))
+            packages.append(PackageVersion(name=title, version=version, url=link, published=published))
     LOG.info(f'Successfully fetched {len(packages)} packages')
     return packages

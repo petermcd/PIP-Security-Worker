@@ -9,12 +9,14 @@ from neo4j import GraphDatabase
 from pip_security_worker import settings
 from pip_security_worker.helpers.exceptions import DatabaseConnectionError
 from pip_security_worker.models.advisory import Advisory
-from pip_security_worker.models.package import Package
+from pip_security_worker.models.package_version import PackageVersion
 
 LOG = logging.getLogger(__name__)
 
 
 class Neo4jHandler(object):
+    """Class to handle Neo4j database operations."""
+
     __slots__ = ('_driver',)
 
     def __init__(self) -> None:
@@ -87,19 +89,19 @@ class Neo4jHandler(object):
             self._driver.execute_query(
                 'MATCH(advisory: Advisory {name: $advisory_name, advisory_id: $advisory_id})'
                 + 'MATCH(packageVersion: PackageVersion {name: $advisory_name, version: $affects}) '
-                + 'MERGE(advisory)-[:affects]->(packageVersion)'
-                + 'MERGE(packageVersion)-[:affected_by]->(advisory)',
+                + 'MERGE(advisory)-[:affects_package_version]->(packageVersion)'
+                + 'MERGE(packageVersion)-[:affected_by_advisory]->(advisory)',
                 advisory_name=advisory.name,
                 affects=version,
                 advisory_id=advisory.advisory_id,
             )
 
-    def add_package(self, package: Package) -> None:
+    def add_package(self, package: PackageVersion) -> None:
         """
         Add a package to the database.
 
         Args:
-            package (Package): The package to be added.
+            package (PackageVersion): The package to be added.
         """
         # TODO fully implement
         LOG.debug(f'Adding package {package.name} to database')

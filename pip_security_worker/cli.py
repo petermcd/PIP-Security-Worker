@@ -5,7 +5,7 @@ import sys
 
 from pip_security_worker.helpers.exceptions import DatabaseConnectionError
 from pip_security_worker.helpers.neo4j_handler import Neo4jHandler
-from pip_security_worker.package_analysis.analyse import Analyse
+from pip_security_worker.package_analysis.analyze import Analyze
 from pip_security_worker.package_analysis.fetch_tasks import FetchTasks
 from pip_security_worker.vulnerability_database.pip_advisory import PIPAdvisory
 
@@ -15,7 +15,7 @@ LOG = logging.getLogger(__name__)
 def run_analysis() -> None:
     """Run the analysis application."""
     LOG.info('Running analysis')
-    Analyse()
+    Analyze()
 
 
 def run_update_advisory_db() -> None:

@@ -9,13 +9,13 @@ description = "The worker for the pip-security eco-system."
 requires-python = ">=3.13"
 dependencies = [
     "defusedxml>=0.7.1",
-    "kafka-python>=2.1.5",
+    "kafka-python>=2.2.7",
     "neo4j>=5.28.1",
     "python-dateutil>=2.9.0.post0",
     "python-dotenv>=1.1.0",
     "pyyaml>=6.0.2",
     "requests>=2.32.3",
-    "sentry-sdk>=2.26.1",
+    "sentry-sdk>=2.29.0",
 ]
 authors = [
     { name = "Peter McDonald", email = "git@petermcdonald.co.uk" },
@@ -44,7 +44,7 @@ Issues = "https://github.com/petermcd/PIP-Security-Worker/issues"
 packages = ["pip_security_worker"]
 
 [project.scripts]
-analyse = "pip_security_worker.cli:run_analysis"
+analyze = "pip_security_worker.cli:run_analysis"
 update_advisory_db = "pip_security_worker.cli:run_update_advisory_db"
 updated_packages = "pip_security_worker.cli:run_recent_updated_packages"
 
@@ -67,3 +67,9 @@ quote-style = "single"
 [[tool.mypy.overrides]]
 module = ["dotenv.*", "kafka.*", "neo4j.*", "pytest.*", "sentry_sdk.*"]
 ignore_missing_imports = true
+
+[dependency-groups]
+dev = [
+    "pytest-cov>=6.1.1",
+    "pytest-mock>=3.14.0",
+]
