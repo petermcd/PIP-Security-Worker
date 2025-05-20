@@ -24,7 +24,7 @@ The following are the commands useful for this project:
 uvx ruff format
 uvx ruff check
 uvx isort .
-uvx uvx --with types-PyYAML --with types-requests --with types-defusedxml --with types-python-dateutil mypy pip_security_worker tests
+uvx --with types-PyYAML --with types-requests --with types-defusedxml --with types-python-dateutil mypy pip_security_worker tests
 ```
 
 ## Configuration
@@ -51,7 +51,7 @@ This package relies on access to a KAFKA queue. Development has been carried out
 Once the image has been created, the following command is required to create the required topic on the docker container:
 
 ```bash
-./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic analyse --partitions 10
+./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic analyze --partitions 10
 ```
 
 For this to function, the following environment variables are required:
@@ -111,10 +111,10 @@ The following is an example of how a complete `.env` file should look:
 ```bash
 PIP_ADVISORY_DB_URL=https://github.com/pypa/advisory-database.git
 PYPI_UPDATE_FEED=https://pypi.org/rss/updates.xml
-KAFKA_GROUP=analyse
+KAFKA_GROUP=analyze
 KAFKA_TIMEOUT=5000
 KAFKA_BOOTSTRAP_SERVERS=localhost:9092
-KAFKA_TOPIC=analyse
+KAFKA_TOPIC=analyze
 NEO4J_URL=neo4j://localhost:7687
 NEO4J_USERNAME=neo4j
 NEO4J_PASSWORD=password

@@ -22,7 +22,7 @@
         <item>
             <title>flytekitplugins-openai 1.14.8</title>
             <link>https://pypi.org/project/flytekitplugins-openai/1.14.8/</link>
-            <description>This package holds the openai plugins for flytekit</description>
+            <description>This package holds the OpenAI plugins for flytekit</description>
             <author>admin@flyte.org</author>
             <pubDate>Wed, 23 Apr 2025 06:58:24 GMT</pubDate>
         </item>
