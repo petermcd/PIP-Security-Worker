@@ -73,7 +73,7 @@ class TestPackageModel(object):
         Test to ensure the release URL is set correctly.
 
         Args:
-            url: The package URL to be tested.
+            package: The package to be tested.
             expected_release_url: The expected release URL.
         """
         assert package.releases_url == expected_release_url
