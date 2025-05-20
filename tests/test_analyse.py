@@ -82,6 +82,6 @@ class TestAnalyze(object):
             published=datetime.now(),
         )
         mocker.patch('pip_security_worker.package_analysis.analyze.Analyze._fetch_release_info')
-        analyze = Analyze(package)
+        analyze = Analyze(package=package)
 
         assert analyze._parse_requirements(extras, requirements) == expected_requirements

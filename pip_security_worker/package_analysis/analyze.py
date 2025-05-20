@@ -86,6 +86,3 @@ class Analyze(object):
             requirements[extra_name].append(req)
 
         return requirements
-
-
-Analyze()
