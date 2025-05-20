@@ -6,7 +6,7 @@ from json import dumps
 from kafka import KafkaProducer
 
 from pip_security_worker import settings
-from pip_security_worker.helpers.helpers import fetch_recent
+from pip_security_worker.helpers.helper_functions import fetch_recent
 from pip_security_worker.models.package_version import PackageVersion
 
 LOG = logging.getLogger(__name__)
@@ -18,12 +18,12 @@ class FetchTasks(object):
     @staticmethod
     def update() -> None:
         """Fetch new packages to analyze from the pypi update feed."""
-        LOG.debug('Fetching new packages to analyze from the pypi update feed')
+        LOG.debug('FetchTasks:update - Fetching new packages to analyze from the pypi update feed')
         new_package_versions: list[PackageVersion] = fetch_recent()
         # TODO identify if the packages have already been added
         kafka_producer = KafkaProducer(bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS)
         for package in new_package_versions:
-            LOG.debug(f'Sending package {package.name} {package.version} to Kafka')
+            LOG.debug(f'FetchTasks:update - Sending package {package.name} {package.version} to Kafka')
             payload = {
                 'package_name': package.name,
                 'package_version': package.version,

@@ -65,11 +65,12 @@ quote-style = "single"
 
 [tool.mypt.overrides]
 [[tool.mypy.overrides]]
-module = ["dotenv.*", "kafka.*", "neo4j.*", "pytest.*", "sentry_sdk.*"]
+module = ["dotenv.*", "freezegun.*", "kafka.*", "neo4j.*", "pytest.*", "sentry_sdk.*"]
 ignore_missing_imports = true
 
 [dependency-groups]
 dev = [
+    "freezegun>=1.5.1",
     "pytest-cov>=6.1.1",
     "pytest-mock>=3.14.0",
 ]

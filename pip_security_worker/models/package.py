@@ -29,7 +29,7 @@ class Package(object):
         Returns:
             URL of the release XML page.
         """
-        LOG.debug(f'Calculating the releases XML URL for {self.name}')
+        LOG.debug(f'Package:releases_url - Calculating the releases XML URL for {self.name}')
         url_parts = self.package_url.strip().split('/')
         url_parts.insert(3, 'rss')
         url = '/'.join(url_parts)
@@ -37,4 +37,5 @@ class Package(object):
 
     def __str__(self) -> str:
         """Return the string representation of the package."""
+        LOG.debug(f'Package: __str__ - Calculating the string representation of the Package {self.name}')
         return f'{self.name}'

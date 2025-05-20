@@ -6,7 +6,7 @@ from re import split
 
 import requests
 
-from pip_security_worker.helpers.helpers import fetch_next
+from pip_security_worker.helpers.helper_functions import fetch_next
 from pip_security_worker.models.package import Package
 from pip_security_worker.models.package_version import PackageVersion
 from pip_security_worker.models.requirement import Requirement
@@ -26,12 +26,14 @@ class Analyze(object):
         Args:
             package (PackageVersion, optional): The package to be analyzed. Defaults to None.
         """
-        LOG.debug('Initializing Analyze')
+        LOG.debug('Analyze:__init__ - Initializing Analyze')
         self._package = package or fetch_next()
         self._fetch_release_info()
 
-    def _fetch_release_info(self):
+    def _fetch_release_info(self) -> None:
         """Fetch the release information for the package version."""
+        if not self._package:
+            return
         response = requests.get(self._package.release_json_url)
         details = json.loads(response.text)
         if 'info' in details:
@@ -62,7 +64,7 @@ class Analyze(object):
             extras_list: List of extras the package provides.
             requirements_list: List of requirements for the package.
         """
-        LOG.debug('Parsing requirements for package')
+        LOG.debug('Analyze:_parse_requirements - Parsing requirements for package')
         requirements: dict[str, list[Requirement]] = {'standard': []}
         for extra in extras_list:
             requirements[extra] = []
@@ -71,7 +73,7 @@ class Analyze(object):
             extra_name = 'standard'
             extra_detail = requirement
             if 'extra' in requirement:
-                LOG.debug(f'Extra requirement found: {requirement}')
+                LOG.debug(f'Analyze:_parse_requirements - Extra requirement found: {requirement}')
                 req_split = requirement.split(';')
                 extra_detail = req_split[0]
                 extra_details = req_split[1].split('==')

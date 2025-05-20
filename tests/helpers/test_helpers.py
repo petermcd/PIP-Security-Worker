@@ -5,7 +5,8 @@ from unittest.mock import patch
 
 import pytest
 
-from pip_security_worker.helpers.helpers import fetch_next, fetch_recent
+from pip_security_worker.helpers.helper_functions import (fetch_next,
+                                                          fetch_recent)
 from pip_security_worker.models.package_version import PackageVersion
 
 

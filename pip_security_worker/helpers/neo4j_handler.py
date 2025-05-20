@@ -21,15 +21,15 @@ class Neo4jHandler(object):
 
     def __init__(self) -> None:
         """Initialize the Neo4jHandler."""
-        LOG.debug('Initializing Neo4jHandler')
+        LOG.debug('Neo4jHandler:__init__ - Initializing Neo4jHandler')
         try:
-            LOG.debug('Connecting to Neo4j database')
+            LOG.debug('Neo4jHandler:__init__ - Connecting to Neo4j database')
             self._driver = GraphDatabase.driver(
                 settings.NEO4J_URL,
                 auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD),
             )
         except (neo4j.exceptions.ConfigurationError, neo4j.exceptions.ServiceUnavailable) as exc:
-            LOG.critical('Failed to connect to Neo4j database')
+            LOG.critical('Neo4jHandler:__init__ - Failed to connect to Neo4j database')
             raise DatabaseConnectionError('Failed to connect to Neo4j database') from exc
 
     def add_advisory(self, advisory: Advisory) -> None:
@@ -39,7 +39,7 @@ class Neo4jHandler(object):
         Args:
             advisory (Advisory): The advisory to be added.
         """
-        LOG.debug(f'Adding advisory {advisory.name} to database')
+        LOG.debug(f'Neo4jHandler:add_advisory - Adding advisory {advisory.name} to database')
         advisory_url: str = advisory.url or ''
         security_types: str = advisory.security_type or ''
         severity_score: str = advisory.severity_score or ''
@@ -81,7 +81,7 @@ class Neo4jHandler(object):
             package_history_analyzed=0,
         )
         if not advisory.versions:
-            LOG.debug(f'No affected versions found for advisory {advisory.name}')
+            LOG.debug(f'Neo4jHandler:link_to_package - No affected versions found for advisory {advisory.name}')
             # TODO identify what to do here.
             return
         for version in advisory.versions:
@@ -104,7 +104,7 @@ class Neo4jHandler(object):
             package (PackageVersion): The package to be added.
         """
         # TODO fully implement
-        LOG.debug(f'Adding package {package.name} to database')
+        LOG.debug(f'Neo4jHandler:add_package - Adding package {package.name} to database')
         self._driver.execute_query(
             'MERGE (advisory:Package {name: $package_name, version: $package_version})',
             package_name=package.name,
@@ -113,7 +113,7 @@ class Neo4jHandler(object):
 
     def close(self) -> None:
         """Close the driver."""
-        LOG.debug('Closing Neo4jHandler')
+        LOG.debug('Neo4jHandler:close - Closing Neo4jHandler')
         if self._driver is not None:
-            LOG.debug('Connection exists, closing')
+            LOG.debug('Neo4jHandler:close - Connection exists, closing')
             self._driver.close()

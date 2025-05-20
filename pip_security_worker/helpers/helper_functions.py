@@ -27,7 +27,7 @@ def fetch_next() -> PackageVersion | None:
     Returns:
         Package: The next package to be analyzed is taken from the FIFO queue.
     """
-    LOG.debug('Starting fetch of next package from Kafka')
+    LOG.debug('helper_functions:fetch_next - Starting fetch of next package from Kafka')
     consumer = KafkaConsumer(
         settings.KAFKA_TOPIC,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
@@ -37,10 +37,12 @@ def fetch_next() -> PackageVersion | None:
     )
 
     try:
-        LOG.debug('Fetching next package from Kafka')
+        LOG.debug('helper_functions:fetch_next - Fetching next package from Kafka')
         data_str = next(consumer).value.decode('utf-8')
         data_json = loads(data_str)
-        LOG.debug(f'Fetched package {data_json["package_name"]} {data_json["package_version"]}')
+        LOG.debug(
+            f'helper_functions:fetch_next - Fetched package {data_json["package_name"]} {data_json["package_version"]}'
+        )
         package: PackageVersion = PackageVersion(
             name=data_json['package_name'],
             version=data_json['package_version'],
@@ -48,10 +50,10 @@ def fetch_next() -> PackageVersion | None:
             published=datetime.fromisoformat(data_json['published']),
         )
     except StopIteration as exc:
-        LOG.debug('No tasks waiting in Kafka.')
+        LOG.debug('helper_functions:fetch_next - No tasks waiting in Kafka.')
         raise NoTasksError('No tasks waiting.') from exc
     except JSONDecodeError:
-        LOG.debug('Failed to decode JSON data')
+        LOG.debug('helper_functions:fetch_next - Failed to decode JSON data')
         raise NoTasksError('Task not in expected format.') from None
     finally:
         consumer.close()
@@ -66,17 +68,17 @@ def fetch_recent() -> list[PackageVersion]:
     Returns:
         list[Package]: A list of recently updated packages.
     """
-    LOG.debug('Starting fetch of recently updated packages')
+    LOG.debug('helper_functions:fetch_recent - Starting fetch of recently updated packages')
     url = settings.PYPI_RECENT_PACKAGE_UPDATE_FEED
     response = requests.get(url)
     packages: list[PackageVersion] = []
     if response.status_code == requests.codes.ok:
-        LOG.debug('Successfully fetched recently updated packages')
+        LOG.debug('helper_functions:fetch_recent - Successfully fetched recently updated packages')
         xml_data = response.content
         try:
             dom = parseString(xml_data.decode('utf-8'))
         except ExpatError:
-            LOG.critical('Failed to parse XML data')
+            LOG.critical('helper_functions:fetch_recent - Failed to parse XML data')
             return packages
         items = dom.getElementsByTagName('item')
         for item in items:
@@ -90,5 +92,5 @@ def fetch_recent() -> list[PackageVersion]:
             title = link_split[-2]
             version = link_split[-1]
             packages.append(PackageVersion(name=title, version=version, url=link, published=published))
-    LOG.info(f'Successfully fetched {len(packages)} packages')
+    LOG.info(f'helper_functions:fetch_recent - Successfully fetched {len(packages)} packages')
     return packages

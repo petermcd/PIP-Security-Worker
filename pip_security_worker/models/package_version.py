@@ -31,7 +31,9 @@ class PackageVersion(object):
         Returns:
             URL of the release JSON information.
         """
-        LOG.debug(f'Calculating the release JSON URL for {self.name} version {self.version}')
+        LOG.debug(
+            f'PackageVersion:release_json_url - Calculating the release JSON URL for {self.name} version {self.version}'
+        )
         return f'https://pypi.python.org/pypi/{self.name}/{self.version}/json'
 
     @cached_property
@@ -42,7 +44,7 @@ class PackageVersion(object):
         Returns:
             URL of the release XML page.
         """
-        LOG.debug(f'Calculating the releases XML URL for {self.name}')
+        LOG.debug(f'PackageVersion:releases_url - Calculating the releases XML URL for {self.name}')
         url_parts = self.url.strip().split('/')
         url_parts.insert(3, 'rss')
         if url_parts[-1] == '':
@@ -54,4 +56,5 @@ class PackageVersion(object):
 
     def __str__(self) -> str:
         """Return the string representation of the package."""
-        return f'{self.name} {self.version}'
+        LOG.debug(f'PackageVersion: __str__ - Calculating the string representation of the PackageVersion {self.name}')
+        return f'{self.name} - {self.version}'
