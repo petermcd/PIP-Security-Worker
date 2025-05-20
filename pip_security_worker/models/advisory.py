@@ -23,7 +23,6 @@ class Advisory(object):
     severity_score: str | None = None
     references: dict[str, str] | None = None
 
-    @cache
     def __str__(self) -> str:
         """Return the string representation of the advisory."""
         LOG.debug(f'Advisory: __str__ - Calculating the string representation of the advisory {self.name}')
