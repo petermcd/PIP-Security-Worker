@@ -1,6 +1,6 @@
 """Code to test the analyze.py module."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 import pytest
 
@@ -9,52 +9,52 @@ from pip_security_worker.models.requirement import Requirement
 from pip_security_worker.package_analysis.analyze import Analyze
 
 
-class TestAnalyze(object):
+class TestAnalyze:
     """
     Set of tests to ensure the 'analyze' class is working as expected.
     """
 
     @pytest.mark.parametrize(
-        'extras,requirements,expected_requirements',
+        "extras,requirements,expected_requirements",
         [
             (
                 # Test to ensure that an empty list of extras is parsed correctly.
                 [],
                 [],
                 {
-                    'standard': [],
+                    "standard": [],
                 },
             ),
             (
                 # Test to a requirement without a version is parsed correctly.
                 [],
-                ['requests'],
+                ["requests"],
                 {
-                    'standard': [Requirement(name='requests', version='any')],
+                    "standard": [Requirement(name="requests", version="any")],
                 },
             ),
             (
                 # Test to ensure that an extra with no required packages is parsed correctly.
-                ['security'],
-                ['requests'],
+                ["security"],
+                ["requests"],
                 {
-                    'security': [],
-                    'standard': [Requirement(name='requests', version='any')],
+                    "security": [],
+                    "standard": [Requirement(name="requests", version="any")],
                 },
             ),
             (
                 # Test to ensure that multiple extras are parsed correctly with versions.
-                ['security', 'socks'],
+                ["security", "socks"],
                 [
-                    'requests',
+                    "requests",
                     'PySocks!=1.5.7,>=1.5.6; extra == "socks"',
                 ],
                 {
-                    'security': [],
-                    'socks': [
-                        Requirement(name='PySocks', version='!=1.5.7,>=1.5.6'),
+                    "security": [],
+                    "socks": [
+                        Requirement(name="PySocks", version="!=1.5.7,>=1.5.6"),
                     ],
-                    'standard': [Requirement(name='requests', version='any')],
+                    "standard": [Requirement(name="requests", version="any")],
                 },
             ),
         ],
@@ -76,12 +76,12 @@ class TestAnalyze(object):
             mocker: Pytest mocker object.
         """
         package = PackageVersion(
-            name='nothing',
-            version='2.32.3',
-            url='https://pypi.org/project/nothing/1.0.0/',
-            published=datetime.now(),
+            name="nothing",
+            version="2.32.3",
+            url="https://pypi.org/project/nothing/1.0.0/",
+            published=datetime.now(tz=UTC),
         )
-        mocker.patch('pip_security_worker.package_analysis.analyze.Analyze._fetch_release_info')
+        mocker.patch("pip_security_worker.package_analysis.analyze.Analyze._fetch_release_info")
         analyze = Analyze(package=package)
 
         assert analyze._parse_requirements(extras, requirements) == expected_requirements

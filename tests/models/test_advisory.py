@@ -1,6 +1,6 @@
 """Code to test the Advisory model."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 import pytest
 from freezegun import freeze_time
@@ -8,33 +8,33 @@ from freezegun import freeze_time
 from pip_security_worker.models.advisory import Advisory
 
 
-class TestAdvisory(object):
+class TestAdvisory:
     """Test suite to test the Advisory model."""
 
-    @freeze_time('2025-01-01')
+    @freeze_time("2025-01-01")
     @pytest.mark.parametrize(
-        'name,advisory_id,versions,expected_string',
+        "name,advisory_id,versions,expected_string",
         [
             (
                 # Test to ensure the string is correct when a single version is provided.
-                'Requests',
-                'abc123',
-                ['1.0.0'],
-                "2025-01-01T00:00:00 abc123 Requests versions '1.0.0'",
+                "Requests",
+                "abc123",
+                ["1.0.0"],
+                "2025-01-01T00:00:00+00:00 abc123 Requests versions '1.0.0'",
             ),
             (
                 # Test to ensure the string is correct when multiple versions are provided.
-                'Monzo-API',
-                'def456',
-                ['1.0.0', '2.0.0'],
-                "2025-01-01T00:00:00 def456 Monzo-API versions '1.0.0, 2.0.0'",
+                "Monzo-API",
+                "def456",
+                ["1.0.0", "2.0.0"],
+                "2025-01-01T00:00:00+00:00 def456 Monzo-API versions '1.0.0, 2.0.0'",
             ),
             (
                 # Test to ensure the string is correct when no versions are provided.
-                'Monzo-API',
-                'def456',
+                "Monzo-API",
+                "def456",
                 None,
-                "2025-01-01T00:00:00 def456 Monzo-API versions 'ANY'",
+                "2025-01-01T00:00:00+00:00 def456 Monzo-API versions 'ANY'",
             ),
         ],
     )
@@ -50,10 +50,10 @@ class TestAdvisory(object):
         """
         advisory = Advisory(
             name=name,
-            description='No description to see.',
-            published=datetime.now(),
+            description="No description to see.",
+            published=datetime.now(tz=UTC),
             advisory_id=advisory_id,
-            raw='No raw data to see.',
+            raw="No raw data to see.",
             versions=versions,
         )
         assert str(advisory) == expected_string

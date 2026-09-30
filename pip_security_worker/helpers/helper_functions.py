@@ -1,7 +1,7 @@
 """Helper function§s for package analysis."""
 
 import logging
-from datetime import datetime
+from datetime import UTC, datetime
 from json import JSONDecodeError, loads
 from xml.parsers.expat import ExpatError
 from xmlrpc.client import DateTime
@@ -27,34 +27,34 @@ def fetch_next() -> PackageVersion | None:
     Returns:
         Package: The next package to be analyzed is taken from the FIFO queue.
     """
-    LOG.debug('helper_functions:fetch_next - Starting fetch of next package from Kafka')
+    LOG.debug("helper_functions:fetch_next - Starting fetch of next package from Kafka")
     consumer = KafkaConsumer(
         settings.KAFKA_TOPIC,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
         group_id=settings.KAFKA_GROUP,
         consumer_timeout_ms=int(settings.KAFKA_TIMEOUT),
-        auto_offset_reset='earliest',
+        auto_offset_reset="earliest",
     )
 
     try:
-        LOG.debug('helper_functions:fetch_next - Fetching next package from Kafka')
-        data_str = next(consumer).value.decode('utf-8')
+        LOG.debug("helper_functions:fetch_next - Fetching next package from Kafka")
+        data_str = next(consumer).value.decode("utf-8")
         data_json = loads(data_str)
         LOG.debug(
-            f'helper_functions:fetch_next - Fetched package {data_json["package_name"]} {data_json["package_version"]}'
+            f"helper_functions:fetch_next - Fetched package {data_json['package_name']} {data_json['package_version']}"
         )
         package: PackageVersion = PackageVersion(
-            name=data_json['package_name'],
-            version=data_json['package_version'],
-            url=data_json['package_link'],
-            published=datetime.fromisoformat(data_json['published']),
+            name=data_json["package_name"],
+            version=data_json["package_version"],
+            url=data_json["package_link"],
+            published=datetime.fromisoformat(data_json["published"]),
         )
     except StopIteration as exc:
-        LOG.debug('helper_functions:fetch_next - No tasks waiting in Kafka.')
-        raise NoTasksError('No tasks waiting.') from exc
+        LOG.debug("helper_functions:fetch_next - No tasks waiting in Kafka.")
+        raise NoTasksError("No tasks waiting.") from exc
     except JSONDecodeError:
-        LOG.debug('helper_functions:fetch_next - Failed to decode JSON data')
-        raise NoTasksError('Task not in expected format.') from None
+        LOG.debug("helper_functions:fetch_next - Failed to decode JSON data")
+        raise NoTasksError("Task not in expected format.") from None
     finally:
         consumer.close()
 
@@ -68,29 +68,29 @@ def fetch_recent() -> list[PackageVersion]:
     Returns:
         list[Package]: A list of recently updated packages.
     """
-    LOG.debug('helper_functions:fetch_recent - Starting fetch of recently updated packages')
+    LOG.debug("helper_functions:fetch_recent - Starting fetch of recently updated packages")
     url = settings.PYPI_RECENT_PACKAGE_UPDATE_FEED
     response = requests.get(url)
     packages: list[PackageVersion] = []
     if response.status_code == requests.codes.ok:
-        LOG.debug('helper_functions:fetch_recent - Successfully fetched recently updated packages')
+        LOG.debug("helper_functions:fetch_recent - Successfully fetched recently updated packages")
         xml_data = response.content
         try:
-            dom = parseString(xml_data.decode('utf-8'))
+            dom = parseString(xml_data.decode("utf-8"))
         except ExpatError:
-            LOG.critical('helper_functions:fetch_recent - Failed to parse XML data')
+            LOG.critical("helper_functions:fetch_recent - Failed to parse XML data")
             return packages
-        items = dom.getElementsByTagName('item')
+        items = dom.getElementsByTagName("item")
         for item in items:
             # TODO Fix this typing
-            link = item.getElementsByTagName('link')[0].firstChild.nodeValue  # type: ignore[union-attr]
-            xml_date: DateTime = item.getElementsByTagName('pubDate')[0].firstChild.nodeValue  # type: ignore[union-attr]
-            published = datetime.strptime(str(xml_date), '%a, %d %b %Y %H:%M:%S %Z')
-            link_split = link.split('/')
+            link = item.getElementsByTagName("link")[0].firstChild.nodeValue  # type: ignore[union-attr]
+            xml_date: DateTime = item.getElementsByTagName("pubDate")[0].firstChild.nodeValue  # type: ignore[union-attr]
+            published = datetime.strptime(str(xml_date), "%a, %d %b %Y %H:%M:%S %Z").replace(tzinfo=UTC)
+            link_split = link.split("/")
             if not link_split[-1]:
                 del link_split[-1]
             title = link_split[-2]
             version = link_split[-1]
             packages.append(PackageVersion(name=title, version=version, url=link, published=published))
-    LOG.info(f'helper_functions:fetch_recent - Successfully fetched {len(packages)} packages')
+    LOG.info(f"helper_functions:fetch_recent - Successfully fetched {len(packages)} packages")
     return packages

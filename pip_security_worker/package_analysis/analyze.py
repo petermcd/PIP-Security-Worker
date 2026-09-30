@@ -14,10 +14,10 @@ from pip_security_worker.models.requirement import Requirement
 LOG = logging.getLogger(__name__)
 
 
-class Analyze(object):
+class Analyze:
     """Class to analyze a package."""
 
-    __slots__ = ('_package',)
+    __slots__ = ("_package",)
 
     def __init__(self, package: PackageVersion | None = None) -> None:
         """
@@ -26,7 +26,7 @@ class Analyze(object):
         Args:
             package (PackageVersion, optional): The package to be analyzed. Defaults to None.
         """
-        LOG.debug('Analyze:__init__ - Initializing Analyze')
+        LOG.debug("Analyze:__init__ - Initializing Analyze")
         self._package = package or fetch_next()
         self._fetch_release_info()
 
@@ -36,22 +36,22 @@ class Analyze(object):
             return
         response = requests.get(self._package.release_json_url)
         details = json.loads(response.text)
-        if 'info' in details:
+        if "info" in details:
             self._package.requirements = self._parse_requirements(
-                extras_list=details['info'].get('provides_extra', []),
-                requirements_list=details['info'].get('requires_dist', []),
+                extras_list=details["info"].get("provides_extra", []),
+                requirements_list=details["info"].get("requires_dist", []),
             )
-            self._package.python_version = details['info'].get('requires_python', '')
+            self._package.python_version = details["info"].get("requires_python", "")
 
             self._package.for_package = Package(
-                name=details['info'].get('name', ''),
-                description=details['info'].get('description', ''),
-                description_type=details['info'].get('description_content_type', ''),
-                author=details['info'].get('author', ''),
-                author_email=details['info'].get('author_email', ''),
-                license=details['info'].get('license', ''),
-                package_url=details['info'].get('package_url', ''),
-                project_urls=details['info'].get('project_urls', ''),
+                name=details["info"].get("name", ""),
+                description=details["info"].get("description", ""),
+                description_type=details["info"].get("description_content_type", ""),
+                author=details["info"].get("author", ""),
+                author_email=details["info"].get("author_email", ""),
+                license=details["info"].get("license", ""),
+                package_url=details["info"].get("package_url", ""),
+                project_urls=details["info"].get("project_urls", ""),
                 raw=response.text,
             )
 
@@ -64,26 +64,26 @@ class Analyze(object):
             extras_list: List of extras the package provides.
             requirements_list: List of requirements for the package.
         """
-        LOG.debug('Analyze:_parse_requirements - Parsing requirements for package')
-        requirements: dict[str, list[Requirement]] = {'standard': []}
+        LOG.debug("Analyze:_parse_requirements - Parsing requirements for package")
+        requirements: dict[str, list[Requirement]] = {"standard": []}
         for extra in extras_list:
             requirements[extra] = []
 
         for requirement in requirements_list:
-            extra_name = 'standard'
+            extra_name = "standard"
             extra_detail = requirement
-            if 'extra' in requirement:
-                LOG.debug(f'Analyze:_parse_requirements - Extra requirement found: {requirement}')
-                req_split = requirement.split(';')
+            if "extra" in requirement:
+                LOG.debug(f"Analyze:_parse_requirements - Extra requirement found: {requirement}")
+                req_split = requirement.split(";")
                 extra_detail = req_split[0]
-                extra_details = req_split[1].split('==')
-                extra_name = extra_details[1].strip().replace('"', '')
+                extra_details = req_split[1].split("==")
+                extra_name = extra_details[1].strip().replace('"', "")
 
-            version_split = split(r'[<>=!]', requirement)
-            version_details = extra_detail.replace(version_split[0], '')
+            version_split = split(r"[<>=!]", requirement)
+            version_details = extra_detail.replace(version_split[0], "")
             req = Requirement(
                 name=version_split[0],
-                version=version_details or 'any',
+                version=version_details or "any",
             )
             requirements[extra_name].append(req)
 

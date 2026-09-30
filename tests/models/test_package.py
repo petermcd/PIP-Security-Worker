@@ -5,29 +5,29 @@ import pytest
 from pip_security_worker.models.package import Package
 
 
-class TestPackageModel(object):
+class TestPackageModel:
     """
     Set of tests to ensure models are working as expected.
     """
 
     @pytest.mark.parametrize(
-        'package,expected_release_url',
+        "package,expected_release_url",
         [
             (
                 # Test to ensure the URL is correct for 'Package' when the link ends with a trailing slash.
                 Package(
-                    name='test',
-                    package_url='https://pypi.org/project/contact/',
+                    name="test",
+                    package_url="https://pypi.org/project/contact/",
                 ),
-                'https://pypi.org/rss/project/contact/releases.xml',
+                "https://pypi.org/rss/project/contact/releases.xml",
             ),
             (
                 # Test to ensure the URL is correct for 'Package' when the link ends without a trailing slash.
                 Package(
-                    name='test',
-                    package_url='https://pypi.org/project/contact',
+                    name="test",
+                    package_url="https://pypi.org/project/contact",
                 ),
-                'https://pypi.org/rss/project/contact/releases.xml',
+                "https://pypi.org/rss/project/contact/releases.xml",
             ),
         ],
     )
@@ -42,22 +42,22 @@ class TestPackageModel(object):
         assert package.releases_url == expected_release_url
 
     @pytest.mark.parametrize(
-        'name,package_url,expected_string',
+        "name,package_url,expected_string",
         [
             (
-                'contact',
-                'https://pypi.org/project/contact/',
-                'contact',
+                "contact",
+                "https://pypi.org/project/contact/",
+                "contact",
             ),
             (
-                'monzo-api',
-                'https://pypi.org/project/monzo-api/',
-                'monzo-api',
+                "monzo-api",
+                "https://pypi.org/project/monzo-api/",
+                "monzo-api",
             ),
             (
-                'Requests',
-                'https://pypi.org/project/requests/',
-                'Requests',
+                "Requests",
+                "https://pypi.org/project/requests/",
+                "Requests",
             ),
         ],
     )
