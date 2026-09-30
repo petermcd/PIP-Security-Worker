@@ -1,37 +1,42 @@
-[build-system]
-requires = ["hatchling >= 1.29.0"]
-build-backend = "hatchling.build"
-
 [project]
-version = "0.0.1"
 name = "pip-security-worker"
-description = "The worker for the pip-security eco-system."
-requires-python = ">=3.13"
-dependencies = [
-    "defusedxml>=0.7.1",
-    "kafka-python>=2.2.7",
-    "neo4j>=5.28.1",
-    "python-dateutil>=2.9.0.post0",
-    "python-dotenv>=1.2.2",
-    "pyyaml>=6.0.3",
-    "requests>=2.33.1",
-    "sentry-sdk>=2.29.0",
-]
+version = "0.0.2"
 authors = [
     { name = "Peter McDonald", email = "git@petermcdonald.co.uk" },
 ]
 maintainers = [
     { name = "Peter McDonald", email = "git@petermcdonald.co.uk" },
 ]
+description = "The worker for the pip-security eco-system."
+keywords = ["pip", "security"]
 readme = {file = "README.md", content-type = "text/markdown"}
 license = "MIT"
 license-files = ["LICENSE"]
-keywords = ["pip", "security"]
+requires-python = ">=3.13"
+
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.13",
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Programming Language :: Python :: 3.16",
+  "Typing :: Typed",
+]
+
+dependencies = [
+    "defusedxml>=0.7.1",
+    "idna>=3.20",  # Minimum version to resolve security issue (requests dependency)
+    "kafka-python>=3.0.11",
+    "neo4j>=6.3.1",
+    "python-dateutil>=2.9.0.post0",
+    "python-dotenv>=1.2.3",
+    "pyyaml>=6.0.3",
+    "requests>=2.34.2",
+    "sentry-sdk>=2.71.0",
+    "urllib3>=2.8.0",  # Minimum version to resolve security issue (sentry-sdk dependency)
 ]
 
 [project.urls]
@@ -40,37 +45,29 @@ Documentation = "https://github.com/petermcd/PIP-Security-Worker"
 Repository = "https://github.com/petermcd/PIP-Security-Worker.git"
 Issues = "https://github.com/petermcd/PIP-Security-Worker/issues"
 
-[tool.hatch.build.targets.wheel]
-packages = ["pip_security_worker"]
+[build-system]
+requires = ["setuptools>=84", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+lint = [
+    "freezegun>=1.5.5",
+    "pytest-cov>=7.1.0",
+    "pytest-mock>=3.16.0",
+    "ruff>=0.16.8",
+    "troml>=0.4.1",
+    "ty>=0.0.82",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=pip_security_worker --cov-report term-missing --cov-report xml:coverage.xml"
+
+[tool.ruff]
+line-length = 120
+
 
 [project.scripts]
 analyze = "pip_security_worker.cli:run_analysis"
 update_advisory_db = "pip_security_worker.cli:run_update_advisory_db"
 updated_packages = "pip_security_worker.cli:run_recent_updated_packages"
 
-[tool.ruff]
-
-line-length = 120
-target-version = "py313"
-indent-width = 4
-
-[tool.ruff.lint.isort]
-combine-as-imports = true
-
-[tool.ruff.lint]
-fixable = ["ALL"]
-
-[tool.ruff.format]
-quote-style = "single"
-
-[tool.mypt.overrides]
-[[tool.mypy.overrides]]
-module = ["dotenv.*", "freezegun.*", "kafka.*", "neo4j.*", "pytest.*", "sentry_sdk.*"]
-ignore_missing_imports = true
-
-[dependency-groups]
-dev = [
-    "freezegun>=1.5.1",
-    "pytest-cov>=7.1.0",
-    "pytest-mock>=3.14.0",
-]

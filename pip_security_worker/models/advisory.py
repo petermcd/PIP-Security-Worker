@@ -8,7 +8,7 @@ LOG = logging.getLogger(__name__)
 
 
 @dataclass
-class Advisory(object):
+class Advisory:
     """Advisory dataclass."""
 
     name: str
@@ -24,6 +24,6 @@ class Advisory(object):
 
     def __str__(self) -> str:
         """Return the string representation of the advisory."""
-        LOG.debug(f'Advisory: __str__ - Calculating the string representation of the advisory {self.name}')
-        versions = ', '.join(self.versions) if self.versions else 'ANY'
+        LOG.debug(f"Advisory: __str__ - Calculating the string representation of the advisory {self.name}")
+        versions = ", ".join(self.versions) if self.versions else "ANY"
         return f"{self.published.isoformat()} {self.advisory_id} {self.name} versions '{versions}'"

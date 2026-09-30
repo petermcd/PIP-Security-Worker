@@ -5,22 +5,22 @@ import pytest
 from pip_security_worker.models.requirement import Requirement
 
 
-class TestRequirement(object):
+class TestRequirement:
     """Test suite to test the Requirement model."""
 
     @pytest.mark.parametrize(
-        'name,version,expected_string',
+        "name,version,expected_string",
         [
-            ('monzo-api', '1.0.0', 'monzo-api - 1.0.0'),
+            ("monzo-api", "1.0.0", "monzo-api - 1.0.0"),
             (
-                'monzo-api',
-                '1.0.1',
-                'monzo-api - 1.0.1',
+                "monzo-api",
+                "1.0.1",
+                "monzo-api - 1.0.1",
             ),
             (
-                'requests',
-                '1.0.0',
-                'requests - 1.0.0',
+                "requests",
+                "1.0.0",
+                "requests - 1.0.0",
             ),
         ],
     )

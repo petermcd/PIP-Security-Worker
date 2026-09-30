@@ -1,29 +1,29 @@
 """Code to test the models.py module."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 import pytest
 
 from pip_security_worker.models.package_version import PackageVersion
 
 
-class TestPackageModel(object):
+class TestPackageModel:
     """
     Set of tests to ensure models are working as expected.
     """
 
     @pytest.mark.parametrize(
-        'url,expected_release_detail_json_url',
+        "url,expected_release_detail_json_url",
         [
             (
                 # Test to ensure the JSON URL is correct when the link ends with a trailing slash.
-                'https://pypi.org/project/contact/1.3.9/',
-                'https://pypi.python.org/pypi/contact/1.3.9/json',
+                "https://pypi.org/project/contact/1.3.9/",
+                "https://pypi.python.org/pypi/contact/1.3.9/json",
             ),
             (
                 # Test to ensure the JSON URL is correct when the link ends without a trailing slash.
-                'https://pypi.org/project/contact/1.3.9',
-                'https://pypi.python.org/pypi/contact/1.3.9/json',
+                "https://pypi.org/project/contact/1.3.9",
+                "https://pypi.python.org/pypi/contact/1.3.9/json",
             ),
         ],
     )
@@ -36,35 +36,35 @@ class TestPackageModel(object):
             expected_release_detail_json_url: The expected JSON URL for the package release.
         """
         package = PackageVersion(
-            name='contact',
-            version='1.3.9',
+            name="contact",
+            version="1.3.9",
             url=url,
-            published=datetime.now(),
+            published=datetime.now(tz=UTC),
         )
         assert package.release_json_url == expected_release_detail_json_url
 
     @pytest.mark.parametrize(
-        'package,expected_release_url',
+        "package,expected_release_url",
         [
             (
                 # Test to ensure the URL is correct for PackageVersion when the link ends with a trailing slash.
                 PackageVersion(
-                    name='test',
-                    version='1.0.0',
-                    url='https://pypi.org/project/contact/1.3.9/',
-                    published=datetime.now(),
+                    name="test",
+                    version="1.0.0",
+                    url="https://pypi.org/project/contact/1.3.9/",
+                    published=datetime.now(tz=UTC),
                 ),
-                'https://pypi.org/rss/project/contact/releases.xml',
+                "https://pypi.org/rss/project/contact/releases.xml",
             ),
             (
                 # Test to ensure the URL is correct for PackageVersion when the link ends without a trailing slash.
                 PackageVersion(
-                    name='test',
-                    version='1.0.0',
-                    url='https://pypi.org/project/contact/1.3.9',
-                    published=datetime.now(),
+                    name="test",
+                    version="1.0.0",
+                    url="https://pypi.org/project/contact/1.3.9",
+                    published=datetime.now(tz=UTC),
                 ),
-                'https://pypi.org/rss/project/contact/releases.xml',
+                "https://pypi.org/rss/project/contact/releases.xml",
             ),
         ],
     )
@@ -79,22 +79,22 @@ class TestPackageModel(object):
         assert package.releases_url == expected_release_url
 
     @pytest.mark.parametrize(
-        'name,version,url,published,expected_string',
+        "name,version,url,published,expected_string",
         [
-            ('monzo-api', '1.0.0', 'https://pypi.org/project/monzo-api/', datetime.now(), 'monzo-api - 1.0.0'),
+            ("monzo-api", "1.0.0", "https://pypi.org/project/monzo-api/", datetime.now(tz=UTC), "monzo-api - 1.0.0"),
             (
-                'monzo-api',
-                '1.0.1',
-                'https://pypi.org/project/monzo-api/',
-                datetime.now(),
-                'monzo-api - 1.0.1',
+                "monzo-api",
+                "1.0.1",
+                "https://pypi.org/project/monzo-api/",
+                datetime.now(tz=UTC),
+                "monzo-api - 1.0.1",
             ),
             (
-                'requests',
-                '1.0.0',
-                'https://pypi.org/project/requests/',
-                datetime.now(),
-                'requests - 1.0.0',
+                "requests",
+                "1.0.0",
+                "https://pypi.org/project/requests/",
+                datetime.now(tz=UTC),
+                "requests - 1.0.0",
             ),
         ],
     )
