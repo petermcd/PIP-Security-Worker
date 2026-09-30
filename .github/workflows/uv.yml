@@ -29,8 +29,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
-          - &min-python "3.12" # Lowest supported version; keep first. Aliased by the lint and audit jobs.
-          - "3.13"
+          - &min-python "3.13" # Lowest supported version; keep first. Aliased by the lint and audit jobs.
           - "3.13t"
           - "3.14"
           - "3.14t"
@@ -49,7 +48,7 @@ jobs:
         if: endsWith(matrix.python-version, 't')
         run: echo "PYTHON_GIL=0" >> "$GITHUB_ENV"
       - name: pyTest
-        run: uv run --locked --group test pytest tests
+        run: uv run --locked --group lint pytest tests
   lint:
     name: lint
     runs-on: ubuntu-latest

@@ -229,14 +229,12 @@ dependencies = [
 
 [package.dev-dependencies]
 lint = [
-    { name = "ruff" },
-    { name = "troml" },
-    { name = "ty" },
-]
-test = [
     { name = "freezegun" },
     { name = "pytest-cov" },
     { name = "pytest-mock" },
+    { name = "ruff" },
+    { name = "troml" },
+    { name = "ty" },
 ]
 
 [package.metadata]
@@ -255,14 +253,12 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 lint = [
-    { name = "ruff", specifier = ">=0.16.8" },
-    { name = "troml", specifier = ">=0.4.1" },
-    { name = "ty", specifier = ">=0.0.82" },
-]
-test = [
     { name = "freezegun", specifier = ">=1.5.5" },
     { name = "pytest-cov", specifier = ">=7.1.0" },
     { name = "pytest-mock", specifier = ">=3.16.0" },
+    { name = "ruff", specifier = ">=0.16.8" },
+    { name = "troml", specifier = ">=0.4.1" },
+    { name = "ty", specifier = ">=0.0.82" },
 ]
 
 [[package]]
